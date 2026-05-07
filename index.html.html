@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Era Coins™ — Authenticated Ancient Coins</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c87a;
+    --gold-pale: #f5e6b8;
+    --dark: #0e0b07;
+    --dark-mid: #1a1408;
+    --dark-rich: #241c0e;
+    --parchment: #f0e6c8;
+    --stone: #8a7a5c;
+    --text: #e8d9b0;
+    --text-dim: #a09070;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--dark);
+    color: var(--text);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.3;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 18px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(14,11,7,0.97), transparent);
+    border-bottom: 1px solid rgba(201,168,76,0.12);
+  }
+
+  .nav-logo {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 20px;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-decoration: none;
+  }
+
+  .nav-logo span {
+    font-size: 11px;
+    vertical-align: super;
+    color: var(--gold-light);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold-light); }
+
+  .nav-cta {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--dark);
+    background: var(--gold);
+    border: none;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+  }
+
+  .nav-cta:hover { background: var(--gold-light); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 120px 60px 80px;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,168,76,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%),
+      linear-gradient(160deg, #0e0b07 0%, #1a1408 50%, #0e0b07 100%);
+  }
+
+  /* Ancient coin rings decoration */
+  .coin-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.08);
+    animation: rotate-ring linear infinite;
+  }
+
+  .ring-1 { width: 600px; height: 600px; top: -100px; right: -150px; animation-duration: 60s; }
+  .ring-2 { width: 400px; height: 400px; top: 50px; right: -50px; animation-duration: 45s; border-color: rgba(201,168,76,0.12); }
+  .ring-3 { width: 200px; height: 200px; top: 150px; right: 100px; animation-duration: 30s; border-color: rgba(201,168,76,0.18); }
+
+  @keyframes rotate-ring {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 900px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fade-up 1s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 1.05;
+    color: var(--gold-light);
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fade-up 1s 0.4s forwards;
+    text-shadow: 0 0 80px rgba(201,168,76,0.3);
+  }
+
+  .hero-title-tm {
+    font-size: 0.3em;
+    vertical-align: super;
+    color: var(--gold);
+  }
+
+  .hero-subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(14px, 2vw, 18px);
+    letter-spacing: 4px;
+    color: var(--stone);
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fade-up 1s 0.6s forwards;
+  }
+
+  .divider-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 32px auto;
+    opacity: 0;
+    animation: fade-up 1s 0.8s forwards;
+  }
+
+  .divider-ornament::before,
+  .divider-ornament::after {
+    content: '';
+    display: block;
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+
+  .ornament-icon {
+    color: var(--gold);
+    font-size: 20px;
+  }
+
+  .hero-desc {
+    font-size: 19px;
+    line-height: 1.8;
+    color: var(--text-dim);
+    max-width: 620px;
+    margin: 0 auto 48px;
+    opacity: 0;
+    animation: fade-up 1s 1s forwards;
+    font-style: italic;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fade-up 1s 1.2s forwards;
+  }
+
+  .btn-primary {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--dark);
+    background: var(--gold);
+    border: none;
+    padding: 16px 40px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary:hover { background: var(--gold-light); }
+
+  .btn-outline {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.5);
+    padding: 16px 40px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.06);
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── TRUST BAR ─── */
+  .trust-bar {
+    background: var(--dark-rich);
+    border-top: 1px solid rgba(201,168,76,0.15);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    padding: 24px 60px;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .trust-icon {
+    color: var(--gold);
+    font-size: 18px;
+  }
+
+  /* ─── SECTION COMMON ─── */
+  section {
+    padding: 100px 60px;
+  }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .section-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(28px, 4vw, 44px);
+    color: var(--gold-light);
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  .section-desc {
+    font-size: 18px;
+    line-height: 1.9;
+    color: var(--text-dim);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 70px;
+    font-style: italic;
+  }
+
+  /* ─── FEATURED COLLECTION ─── */
+  .collection {
+    background: linear-gradient(180deg, var(--dark) 0%, var(--dark-mid) 50%, var(--dark) 100%);
+  }
+
+  .coins-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .coin-card {
+    background: var(--dark-rich);
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.4s;
+    border: 1px solid rgba(201,168,76,0.06);
+  }
+
+  .coin-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    transform: scaleX(0);
+    transition: transform 0.4s;
+  }
+
+  .coin-card:hover::before { transform: scaleX(1); }
+  .coin-card:hover { transform: translateY(-4px); }
+
+  .coin-visual {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 28px;
+    background: radial-gradient(circle at 35% 35%, #e8c878, #b89040 40%, #7a5c20 75%, #4a3810);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    box-shadow:
+      0 0 0 4px rgba(201,168,76,0.15),
+      0 0 0 8px rgba(201,168,76,0.06),
+      0 8px 30px rgba(0,0,0,0.6),
+      inset 0 2px 4px rgba(255,220,100,0.3);
+    position: relative;
+    transition: box-shadow 0.4s;
+  }
+
+  .coin-card:hover .coin-visual {
+    box-shadow:
+      0 0 0 4px rgba(201,168,76,0.3),
+      0 0 0 10px rgba(201,168,76,0.1),
+      0 0 40px rgba(201,168,76,0.2),
+      0 8px 30px rgba(0,0,0,0.6),
+      inset 0 2px 4px rgba(255,220,100,0.3);
+  }
+
+  .coin-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: var(--gold);
+    color: var(--dark);
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 4px 8px;
+    text-transform: uppercase;
+  }
+
+  .coin-era {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .coin-name {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .coin-desc {
+    font-size: 15px;
+    color: var(--text-dim);
+    text-align: center;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .coin-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(201,168,76,0.1);
+    padding-top: 20px;
+  }
+
+  .coin-price {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    color: var(--gold-light);
+  }
+
+  .coin-auth {
+    font-size: 12px;
+    color: var(--stone);
+    font-style: italic;
+  }
+
+  .coin-id {
+    font-family: monospace;
+    font-size: 10px;
+    color: var(--stone);
+    margin-top: 6px;
+  }
+
+  /* ─── HOW IT WORKS ─── */
+  .process {
+    background: var(--dark-mid);
+    border-top: 1px solid rgba(201,168,76,0.08);
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+  }
+
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(201,168,76,0.3) 20%, rgba(201,168,76,0.3) 80%, transparent);
+  }
+
+  .step {
+    text-align: center;
+    padding: 0 30px;
+    position: relative;
+  }
+
+  .step-num {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--dark-rich);
+    border: 1px solid rgba(201,168,76,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 24px;
+    color: var(--gold);
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s;
+  }
+
+  .step:hover .step-num {
+    background: rgba(201,168,76,0.1);
+    border-color: var(--gold);
+    box-shadow: 0 0 30px rgba(201,168,76,0.2);
+  }
+
+  .step-title {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .step-desc {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  /* ─── AUTHENTICATION ─── */
+  .auth-section {
+    background: var(--dark);
+  }
+
+  .auth-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: center;
+  }
+
+  .auth-visual {
+    position: relative;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .big-coin {
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #f0d878, #c9a840 35%, #8a6020 65%, #3a2a08);
+    box-shadow:
+      0 0 0 8px rgba(201,168,76,0.12),
+      0 0 0 16px rgba(201,168,76,0.06),
+      0 0 80px rgba(201,168,76,0.15),
+      0 20px 60px rgba(0,0,0,0.8),
+      inset 0 4px 8px rgba(255,230,120,0.4),
+      inset 0 -4px 8px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    animation: coin-float 4s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+  }
+
+  @keyframes coin-float {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-16px) rotate(2deg); }
+  }
+
+  .auth-orbits {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .orbit {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px dashed rgba(201,168,76,0.15);
+  }
+
+  .orbit-1 { width: 320px; height: 320px; animation: spin 20s linear infinite; }
+  .orbit-2 { width: 420px; height: 420px; animation: spin 35s linear infinite reverse; }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .orbit-dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px rgba(201,168,76,0.6);
+  }
+
+  .auth-content h2 {
+    text-align: left;
+    margin-bottom: 30px;
+  }
+
+  .auth-content .section-label {
+    text-align: left;
+  }
+
+  .auth-features {
+    list-style: none;
+    margin-bottom: 40px;
+  }
+
+  .auth-features li {
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: 16px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .auth-features li::before {
+    content: '◈';
+    color: var(--gold);
+    font-size: 14px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .auth-features li strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* ─── PAYMENT ─── */
+  .payment-section {
+    background: var(--dark-rich);
+    border-top: 1px solid rgba(201,168,76,0.08);
+  }
+
+  .payment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .pay-card {
+    background: var(--dark-mid);
+    padding: 32px 24px;
+    text-align: center;
+    border: 1px solid rgba(201,168,76,0.06);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .pay-card:hover {
+    background: rgba(201,168,76,0.05);
+    border-color: rgba(201,168,76,0.2);
+    transform: translateY(-4px);
+  }
+
+  .pay-icon {
+    font-size: 32px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .pay-name {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--text);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .pay-desc {
+    font-size: 13px;
+    color: var(--stone);
+    font-style: italic;
+  }
+
+  /* ─── SHIPPING ─── */
+  .shipping-section {
+    background: var(--dark);
+  }
+
+  .shipping-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .ship-card {
+    background: var(--dark-rich);
+    padding: 40px 32px;
+    border: 1px solid rgba(201,168,76,0.06);
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .ship-card.featured {
+    border-color: rgba(201,168,76,0.3);
+    background: linear-gradient(135deg, rgba(201,168,76,0.06), var(--dark-rich));
+  }
+
+  .ship-card.featured::after {
+    content: 'Recommended';
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    background: var(--gold);
+    color: var(--dark);
+    padding: 4px 10px;
+    text-transform: uppercase;
+  }
+
+  .ship-icon {
+    font-size: 36px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .ship-name {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    color: var(--gold-light);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .ship-desc {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    font-style: italic;
+    margin-bottom: 20px;
+  }
+
+  .ship-time {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  /* ─── ABOUT / OWNER ─── */
+  .about-section {
+    background: var(--dark-mid);
+    border-top: 1px solid rgba(201,168,76,0.08);
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+  }
+
+  .about-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .owner-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #3a2e1a, #1a1408);
+    border: 2px solid rgba(201,168,76,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    margin: 0 auto 28px;
+    box-shadow: 0 0 40px rgba(201,168,76,0.1);
+  }
+
+  .owner-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 26px;
+    color: var(--gold-light);
+    margin-bottom: 6px;
+  }
+
+  .owner-title {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--stone);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .about-text {
+    font-size: 18px;
+    line-height: 1.9;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-bottom: 40px;
+  }
+
+  .about-text strong {
+    color: var(--text);
+    font-style: normal;
+  }
+
+  /* ─── LEGAL COMPLIANCE ─── */
+  .legal-section {
+    background: var(--dark);
+  }
+
+  .legal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .legal-card {
+    padding: 28px 24px;
+    border: 1px solid rgba(201,168,76,0.08);
+    border-left: 2px solid var(--gold);
+    background: rgba(201,168,76,0.02);
+    transition: all 0.3s;
+  }
+
+  .legal-card:hover {
+    background: rgba(201,168,76,0.05);
+    border-color: rgba(201,168,76,0.2);
+    border-left-color: var(--gold-light);
+  }
+
+  .legal-act {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .legal-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ─── CONTACT ─── */
+  .contact-section {
+    background: var(--dark-rich);
+    border-top: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .contact-inner {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .contact-form {
+    margin-top: 20px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 0;
+    color: var(--text);
+    padding: 14px 18px;
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.04);
+  }
+
+  .form-group textarea { height: 120px; resize: vertical; }
+
+  .form-submit {
+    width: 100%;
+    padding: 18px;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: var(--dark);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 8px;
+  }
+
+  .form-submit:hover {
+    background: var(--gold-light);
+    box-shadow: 0 8px 30px rgba(201,168,76,0.25);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #080604;
+    padding: 60px 60px 30px;
+    border-top: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+
+  .footer-brand {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 22px;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .footer-tagline {
+    font-size: 15px;
+    color: var(--stone);
+    line-height: 1.7;
+    font-style: italic;
+    margin-bottom: 24px;
+  }
+
+  .footer-col h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-col ul li a {
+    font-size: 14px;
+    color: var(--stone);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .footer-col ul li a:hover { color: var(--gold-light); }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(201,168,76,0.08);
+    padding-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-copy {
+    font-size: 13px;
+    color: var(--stone);
+    font-style: italic;
+  }
+
+  .footer-legal {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-legal a {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--stone);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .footer-legal a:hover { color: var(--gold-light); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 70px 24px; }
+    .trust-bar { padding: 20px 24px; gap: 30px; }
+    .auth-grid { grid-template-columns: 1fr; gap: 40px; }
+    .auth-visual { height: 300px; }
+    .shipping-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    footer { padding: 50px 24px 24px; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 100px 24px 60px; }
+    .footer-top { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .coins-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s, transform 0.8s;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Era Coins<span>™</span></a>
+  <ul class="nav-links">
+    <li><a href="#collection">Collection</a></li>
+    <li><a href="#authentication">Authentication</a></li>
+    <li><a href="#shipping">Shipping</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#collection" class="nav-cta">Browse Collection</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="coin-ring ring-1"></div>
+  <div class="coin-ring ring-2"></div>
+  <div class="coin-ring ring-3"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Since Ancient Times · Certified Authentic</p>
+    <h1 class="hero-title">Era Coins<span class="hero-title-tm">™</span></h1>
+    <p class="hero-subtitle">Authenticated Ancient Roman & Greek Coinage</p>
+    <div class="divider-ornament">
+      <span class="ornament-icon">⚜</span>
+    </div>
+    <p class="hero-desc">Every coin tells the story of an empire. Certified authentic pieces from ancient Rome and Greece, curated for collectors and history enthusiasts across the United Kingdom.</p>
+    <div class="hero-buttons">
+      <a href="#collection" class="btn-primary">Explore the Collection</a>
+      <a href="#authentication" class="btn-outline">Our Authentication</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item">
+    <span class="trust-icon">🏛</span>
+    NGC / PCGS Certified
+  </div>
+  <div class="trust-item">
+    <span class="trust-icon">⚖</span>
+    UK Legal Compliance
+  </div>
+  <div class="trust-item">
+    <span class="trust-icon">🔐</span>
+    Blockchain Verified
+  </div>
+  <div class="trust-item">
+    <span class="trust-icon">🚚</span>
+    Secure Insured Delivery
+  </div>
+  <div class="trust-item">
+    <span class="trust-icon">↩</span>
+    14-Day Return Policy
+  </div>
+</div>
+
+<!-- COLLECTION -->
+<section class="collection" id="collection">
+  <p class="section-label reveal">Featured Collection</p>
+  <h2 class="section-title reveal">Authenticated Pieces</h2>
+  <p class="section-desc reveal">Each coin arrives with a Certificate of Authenticity, unique verification code, and full historical documentation.</p>
+
+  <div class="coins-grid">
+    <div class="coin-card reveal">
+      <div class="coin-visual">
+        🪙
+        <span class="coin-badge">Gold</span>
+      </div>
+      <p class="coin-era">Roman Empire · 27 BC</p>
+      <h3 class="coin-name">Augustus Aureus</h3>
+      <p class="coin-desc">A gold aureus struck under Augustus, the first Roman Emperor. Exceptional obverse portrait with original mint luster.</p>
+      <div class="coin-meta">
+        <div>
+          <div class="coin-price">£2,850</div>
+          <div class="coin-id">ID: ERA-AU-001</div>
+        </div>
+        <div class="coin-auth">NGC MS 4/5</div>
+      </div>
+    </div>
+
+    <div class="coin-card reveal">
+      <div class="coin-visual" style="background: radial-gradient(circle at 35% 35%, #d8d8d8, #909090 40%, #505050 75%, #282828);">
+        🪙
+        <span class="coin-badge">Silver</span>
+      </div>
+      <p class="coin-era">Athens · 449 BC</p>
+      <h3 class="coin-name">Athenian Tetradrachm</h3>
+      <p class="coin-desc">Iconic silver tetradrachm of Classical Athens featuring Athena obverse and the famous owl reverse. Fine details preserved.</p>
+      <div class="coin-meta">
+        <div>
+          <div class="coin-price">£1,480</div>
+          <div class="coin-id">ID: ERA-AG-002</div>
+        </div>
+        <div class="coin-auth">PCGS VF 35</div>
+      </div>
+    </div>
+
+    <div class="coin-card reveal">
+      <div class="coin-visual" style="background: radial-gradient(circle at 35% 35%, #c87832, #8a4818 40%, #4a2808 75%, #1a0c00);">
+        🪙
+      </div>
+      <p class="coin-era">Roman Republic · 100 BC</p>
+      <h3 class="coin-name">Republican Denarius</h3>
+      <p class="coin-desc">Bronze denarius from the height of the Roman Republic. Depicts the goddess Roma. Complete legend, well centred strike.</p>
+      <div class="coin-meta">
+        <div>
+          <div class="coin-price">£340</div>
+          <div class="coin-id">ID: ERA-AE-003</div>
+        </div>
+        <div class="coin-auth">NGC Fine</div>
+      </div>
+    </div>
+
+    <div class="coin-card reveal">
+      <div class="coin-visual">
+        🪙
+        <span class="coin-badge">Rare</span>
+      </div>
+      <p class="coin-era">Byzantine · 527 AD</p>
+      <h3 class="coin-name">Justinian Solidus</h3>
+      <p class="coin-desc">Gold solidus of Emperor Justinian I. An extraordinary example of late antiquity numismatic artistry with brilliant surfaces.</p>
+      <div class="coin-meta">
+        <div>
+          <div class="coin-price">£3,200</div>
+          <div class="coin-id">ID: ERA-AU-004</div>
+        </div>
+        <div class="coin-auth">NGC MS 5/5</div>
+      </div>
+    </div>
+
+    <div class="coin-card reveal">
+      <div class="coin-visual" style="background: radial-gradient(circle at 35% 35%, #d8d8d8, #909090 40%, #505050 75%, #282828);">
+        🪙
+      </div>
+      <p class="coin-era">Macedon · 336 BC</p>
+      <h3 class="coin-name">Alexander Tetradrachm</h3>
+      <p class="coin-desc">Posthumous silver tetradrachm in the name of Alexander the Great. Heracles obverse, seated Zeus reverse. Museum quality.</p>
+      <div class="coin-meta">
+        <div>
+          <div class="coin-price">£2,100</div>
+          <div class="coin-id">ID: ERA-AG-005</div>
+        </div>
+        <div class="coin-auth">PCGS EF 45</div>
+      </div>
+    </div>
+
+    <div class="coin-card reveal">
+      <div class="coin-visual" style="background: radial-gradient(circle at 35% 35%, #c87832, #8a4818 40%, #4a2808 75%, #1a0c00);">
+        🪙
+      </div>
+      <p class="coin-era">Roman Empire · 117 AD</p>
+      <h3 class="coin-name">Hadrian As</h3>
+      <p class="coin-desc">Large bronze as from the reign of Hadrian, the great builder Emperor. Bold portrait with fine patina of nearly two millennia.</p>
+      <div class="coin-meta">
+        <div>
+          <div class="coin-price">£290</div>
+          <div class="coin-id">ID: ERA-AE-006</div>
+        </div>
+        <div class="coin-auth">NGC VF</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="process" id="process">
+  <p class="section-label reveal">The Process</p>
+  <h2 class="section-title reveal">From Discovery to Your Collection</h2>
+  <p class="section-desc reveal">Every step is carefully managed to ensure authenticity, security, and your complete confidence.</p>
+
+  <div class="process-steps">
+    <div class="step reveal">
+      <div class="step-num">I</div>
+      <h3 class="step-title">Browse & Select</h3>
+      <p class="step-desc">Explore our authenticated inventory. Full documentation, coin ID, and grading details available for each piece.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">II</div>
+      <h3 class="step-title">Review & Agree</h3>
+      <p class="step-desc">Review terms, authentication certificates, refund policy, and delivery information before checkout. Tick-box e-contract acceptance.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">III</div>
+      <h3 class="step-title">Secure Payment</h3>
+      <p class="step-desc">Pay via card, bank transfer, or cryptocurrency. Blockchain verified. TXID issued. Full encryption on every transaction.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">IV</div>
+      <h3 class="step-title">Authenticated Dispatch</h3>
+      <p class="step-desc">Your coin dispatched in tamper-evident secure encapsulation with Certificate of Authenticity, legal warranty, and tracking code.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AUTHENTICATION -->
+<section class="auth-section" id="authentication">
+  <div class="auth-grid">
+    <div class="auth-visual">
+      <div class="auth-orbits">
+        <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+        <div class="orbit orbit-2"><div class="orbit-dot"></div></div>
+      </div>
+      <div class="big-coin">🏛</div>
+    </div>
+    <div class="auth-content">
+      <p class="section-label">Authentication</p>
+      <h2 class="section-title">Beyond All Doubt</h2>
+      <ul class="auth-features">
+        <li><strong>NGC / PCGS Graded</strong> — every coin certified by the world's leading independent numismatic grading services.</li>
+        <li><strong>Certificate of Authenticity</strong> — issued by professional grading services and counter-signed by a qualified UK lawyer.</li>
+        <li><strong>Unique Verification Code</strong> — like a Bitcoin TXID, each coin carries a traceable ID linked to its full history, metal composition, and year of origin.</li>
+        <li><strong>Blockchain Record</strong> — authenticity and payment records stored on-chain via DLT for permanent, tamper-proof verification.</li>
+        <li><strong>Secure Encapsulation</strong> — coins supplied in sealed, tamper-evident holders. Any breach is immediately apparent.</li>
+        <li><strong>Legal Warranty</strong> — additional legal certification by a qualified solicitor provided with each purchase.</li>
+      </ul>
+      <a href="#contact" class="btn-primary">Request Authentication Info</a>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT OPTIONS -->
+<section class="payment-section" id="payment">
+  <p class="section-label reveal">Payment Methods</p>
+  <h2 class="section-title reveal">Pay Your Way</h2>
+  <p class="section-desc reveal">Multiple secure options to suit every collector. All payments encrypted and verified.</p>
+
+  <div class="payment-grid">
+    <div class="pay-card reveal">
+      <span class="pay-icon">💳</span>
+      <p class="pay-name">Credit Card</p>
+      <p class="pay-desc">Visa, Mastercard, American Express. Chargeback protection included.</p>
+    </div>
+    <div class="pay-card reveal">
+      <span class="pay-icon">🏦</span>
+      <p class="pay-name">Debit Card</p>
+      <p class="pay-desc">Barclays, HSBC and all major UK banks. Instant processing.</p>
+    </div>
+    <div class="pay-card reveal">
+      <span class="pay-icon">📅</span>
+      <p class="pay-name">Buy Now Pay Later</p>
+      <p class="pay-desc">Mintpay & KOKO. Interest-free instalments. Reduce financial pressure.</p>
+    </div>
+    <div class="pay-card reveal">
+      <span class="pay-icon">₿</span>
+      <p class="pay-name">Bitcoin</p>
+      <p class="pay-desc">TXID verified payments. Accepted for international collectors.</p>
+    </div>
+    <div class="pay-card reveal">
+      <span class="pay-icon">🪙</span>
+      <p class="pay-name">Stablecoins</p>
+      <p class="pay-desc">USDC, DAI — price-stable crypto. Ideal for Era Coins™ transactions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SHIPPING -->
+<section class="shipping-section" id="shipping">
+  <p class="section-label reveal">Delivery</p>
+  <h2 class="section-title reveal">Secure Shipping for Precious Cargo</h2>
+  <p class="section-desc reveal">High-value ancient coins require the highest standards of delivery. Track every step via our oracle-powered blockchain tracking system.</p>
+
+  <div class="shipping-grid">
+    <div class="ship-card reveal">
+      <span class="ship-icon">📦</span>
+      <h3 class="ship-name">Standard Tracked</h3>
+      <p class="ship-desc">Royal Mail Tracked 48. Full tracking. Tamper-evident packaging. Suitable for lower-value items.</p>
+      <p class="ship-time">3–5 Business Days · From £8.50</p>
+    </div>
+    <div class="ship-card featured reveal">
+      <span class="ship-icon">🛡</span>
+      <h3 class="ship-name">Special Delivery</h3>
+      <p class="ship-desc">Royal Mail Special Delivery Guaranteed. Insured up to £2,500. Signature required. Recommended for most purchases.</p>
+      <p class="ship-time">Next Business Day · From £14.00</p>
+    </div>
+    <div class="ship-card reveal">
+      <span class="ship-icon">✈️</span>
+      <h3 class="ship-name">FedEx Worldwide</h3>
+      <p class="ship-desc">International courier. Fully insured. For international collectors and high-value coins over £2,500.</p>
+      <p class="ship-time">2–4 Business Days · POA</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT / OWNER -->
+<section class="about-section" id="about">
+  <div class="about-inner">
+    <div class="owner-avatar">👤</div>
+    <h2 class="owner-name reveal">Iroshi Shashinika</h2>
+    <p class="owner-title reveal">Founder & Chief Numismatist</p>
+    <p class="about-text reveal">
+      Era Coins™ was founded on a single conviction: that <strong>history should be held, not merely viewed.</strong> Every authenticated coin in our collection carries the weight of centuries — the fingerprints of emperors, merchants, and ordinary people who shaped the ancient world.
+    </p>
+    <p class="about-text reveal">
+      Operating from the United Kingdom and fully compliant with UK consumer protection law, Era Coins™ combines <strong>academic rigour, legal transparency, and modern blockchain technology</strong> to deliver a purchasing experience worthy of the coins themselves.
+    </p>
+    <div class="divider-ornament reveal" style="margin-top: 0;">
+      <span class="ornament-icon">⚜</span>
+    </div>
+  </div>
+</section>
+
+<!-- LEGAL COMPLIANCE -->
+<section class="legal-section" id="legal">
+  <p class="section-label reveal">UK Regulatory Compliance</p>
+  <h2 class="section-title reveal">Trading With Full Legal Confidence</h2>
+  <p class="section-desc reveal">Era Coins™ operates in full compliance with all applicable UK legislation, giving you total peace of mind.</p>
+
+  <div class="legal-grid">
+    <div class="legal-card reveal">
+      <p class="legal-act">Consumer Rights Act 2015</p>
+      <p class="legal-desc">Full consumer rights protection: quality of goods, refunds, replacements, and remedies.</p>
+    </div>
+    <div class="legal-card reveal">
+      <p class="legal-act">Electronic Communications Act 2000</p>
+      <p class="legal-desc">Legally binding e-contracts and e-signatures recognised under UK statute.</p>
+    </div>
+    <div class="legal-card reveal">
+      <p class="legal-act">UK eIDAS Regulations 2016</p>
+      <p class="legal-desc">Electronic identification and trust services for all digital transactions.</p>
+    </div>
+    <div class="legal-card reveal">
+      <p class="legal-act">Data Protection Act 2018 & GDPR</p>
+      <p class="legal-desc">Your personal data is collected, stored, and processed lawfully and securely.</p>
+    </div>
+    <div class="legal-card reveal">
+      <p class="legal-act">Consumer Contracts Regulations 2013</p>
+      <p class="legal-desc">14-day cancellation right, clear pre-contract information for all distance sales.</p>
+    </div>
+    <div class="legal-card reveal">
+      <p class="legal-act">Online Safety Act 2023</p>
+      <p class="legal-desc">Our online platform complies with UK online safety standards and ASA/CAP codes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <p class="section-label reveal">Get In Touch</p>
+    <h2 class="section-title reveal">Enquire About a Coin</h2>
+    <p class="section-desc reveal" style="margin-bottom: 20px;">Questions about authentication, provenance, or a specific piece? Our team responds within one business day.</p>
+
+    <div class="contact-form reveal">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="Your first name">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Your last name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="your@email.co.uk">
+      </div>
+      <div class="form-group">
+        <label>Enquiry Type</label>
+        <select>
+          <option value="">— Select an enquiry type —</option>
+          <option>Purchase Enquiry</option>
+          <option>Authentication Question</option>
+          <option>Coin Verification</option>
+          <option>Shipping & Delivery</option>
+          <option>Refund / Returns</option>
+          <option>General Enquiry</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Describe the coin you're interested in, or ask us anything…"></textarea>
+      </div>
+      <button class="form-submit">Send Enquiry →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">Era Coins™</div>
+      <p class="footer-tagline">Authenticated ancient Roman and Greek coinage, curated for UK collectors and history enthusiasts. Every coin tells a story two thousand years in the making.</p>
+      <p style="font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 2px; color: var(--stone); text-transform: uppercase;">Founder: Iroshi Shashinika</p>
+    </div>
+    <div class="footer-col">
+      <h4>Collection</h4>
+      <ul>
+        <li><a href="#">Roman Coins</a></li>
+        <li><a href="#">Greek Coins</a></li>
+        <li><a href="#">Byzantine Coins</a></li>
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Investment Grade</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Information</h4>
+      <ul>
+        <li><a href="#">Authentication Process</a></li>
+        <li><a href="#">Grading Standards</a></li>
+        <li><a href="#">Payment Methods</a></li>
+        <li><a href="#">Shipping Policy</a></li>
+        <li><a href="#">Refund Policy</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Terms & Conditions</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Cookie Policy</a></li>
+        <li><a href="#">FCA Registration</a></li>
+        <li><a href="#">Complaints</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 Era Coins™. Founded by Iroshi Shashinika. All rights reserved. Registered in England & Wales.</p>
+    <div class="footer-legal">
+      <a href="#">Terms</a>
+      <a href="#">Privacy</a>
+      <a href="#">FCA</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Smooth nav background
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.background = window.scrollY > 80
+      ? 'rgba(14,11,7,0.98)'
+      : 'linear-gradient(to bottom, rgba(14,11,7,0.97), transparent)';
+  });
+
+  // Form submit
+  document.querySelector('.form-submit').addEventListener('click', () => {
+    alert('Thank you for your enquiry. We will respond within one business day.');
+  });
+</script>
+</body>
+</html>
